@@ -40,8 +40,11 @@ const WordCard = props => {
             <Button onClick={handleWordClick}>
                 <Card className={shown ? classes.root_shown : classes.root_hidden} variant="outlined">
                     <CardContent>
-                        <Typography className={shown ? classes.title_shown : classes.title_hidden} color="textSecondary"
-                                    gutterBottom>
+                        <Typography
+                            className={shown ? classes.title_shown : classes.title_hidden}
+                            color="textSecondary"
+                            gutterBottom
+                        >
                             {word}
                         </Typography>
                     </CardContent>

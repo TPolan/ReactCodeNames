@@ -4,20 +4,20 @@ import {makeStyles} from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
     root_hidden: {
-        minWidth: 180,
-        maxWidth: 250,
+        Width: 200,
+        Height: 65,
         borderWidth: '3px',
         borderStyle: 'solid',
         borderColor: 'black',
         backgroundColor: 'rgb(217,202,202)'
     },
     root_shown: {
-        minWidth: 180,
-        maxWidth: 250,
+        Width: 200,
+        Height: 65,
         borderWidth: '3px',
         borderStyle: 'solid',
         borderColor: props => props.wordColor,
-        backgroundColor: "gray"
+        backgroundColor: "brown"
     },
 
     title_hidden: {

@@ -4,10 +4,11 @@ import WordCard from "./WordCard/WordCard";
 import {makeStyles} from "@material-ui/core/styles";
 
 const useStyles = makeStyles({
-    root: {},
-    title: {
-        fontSize: 20,
-    },
+    root: {
+        width: '80%',
+        height: '70%'
+
+    }
 });
 
 const GameBoard = () => {
@@ -48,10 +49,10 @@ const GameBoard = () => {
         randomizedWords.push(colorRandomWords(words, 1, 'purple'));
         return shuffleWords(randomizedWords.reduce((previousValue, currentValue) => [...previousValue, ...currentValue]));
     }
-    const wordsMap = randomizeBoard(words);
+    const gameBoard = randomizeBoard(words);
     return (
-        <Grid className={classes.root} container justify={"center"}>
-            {wordsMap}
+        <Grid className={classes.root} direction={"row"} container justify={"space-between"}>
+            {gameBoard}
         </Grid>
     )
 }

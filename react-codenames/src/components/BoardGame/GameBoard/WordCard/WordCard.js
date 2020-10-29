@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import {Button, Card, CardContent, Grid, Typography} from "@material-ui/core";
 import {makeStyles} from '@material-ui/core/styles';
+import {useDispatch} from "react-redux";
+import {decrementCounter, endGameKiller} from "../../../../redux/actions/actions";
 
 const useStyles = makeStyles({
     root: {
@@ -33,14 +35,25 @@ const useStyles = makeStyles({
 
 const WordCard = props => {
 
+    const dispatch = useDispatch();
+
     const {word, index} = props;
     const classes = useStyles(props);
     const [shown, setShown] = useState(false)
-    const handleWordClick = () => setShown(true);
+    const deathCheck = (cardColor) => {
+        if (cardColor === 'black' && shown) {
+            dispatch(decrementCounter(props.wordColor));
+        }
+    }
+    const handleWordClick = () => {
+        setShown(true);
+
+        dispatch(decrementCounter(props.wordColor))
+    }
 
     return (
         <Grid  item className={classes.root} key={`${word + index}`}>
-            <Button  onClick={handleWordClick}>
+            <Button disabled={shown} onClick={handleWordClick}>
                 <Card className={shown ? classes.border_shown : classes.border_hidden} variant="outlined">
                     <CardContent>
                         <Typography

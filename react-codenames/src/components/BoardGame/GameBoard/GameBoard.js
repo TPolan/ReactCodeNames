@@ -2,6 +2,7 @@ import React from 'react';
 import {Grid} from "@material-ui/core";
 import WordCard from "./WordCard/WordCard";
 import {makeStyles} from "@material-ui/core/styles";
+import GameEndDialog from "./GameEndDialog/GameEndDialog";
 
 const useStyles = makeStyles({
     root: {
@@ -14,6 +15,7 @@ const useStyles = makeStyles({
 const GameBoard = () => {
 
     const classes = useStyles();
+    const [open, setOpen] = useState(false)
     const words = ['Placeholder1', 'Placeholder2', 'Placeholder3', 'Placeholder4', 'Placeholder5', 'Placeholder6', 'Placeholder7', 'Placeholder8', 'Placeholder9', 'Placeholder10', 'Placeholder11', 'Placeholder12', 'Placeholder13', 'Placeholder14', 'Placeholder15', 'Placeholder16', 'Placeholder17', 'Placeholder18', 'Placeholder19', 'Placeholder20', 'Placeholder21', 'Placeholder22', 'Placeholder23', 'Placeholder24', 'Placeholder25']
     const colorRandomWords = (words, wordCount, wordColor) => {
         let coloredWords = [];
@@ -37,7 +39,6 @@ const GameBoard = () => {
             words[i] = words[j];
             words[j] = temp;
         }
-
         return words;
     }
 
@@ -46,13 +47,20 @@ const GameBoard = () => {
         randomizedWords.push(colorRandomWords(words, 9, 'red'));
         randomizedWords.push(colorRandomWords(words, 8, 'blue'));
         randomizedWords.push(colorRandomWords(words, 7, 'grey'));
-        randomizedWords.push(colorRandomWords(words, 1, 'purple'));
+        randomizedWords.push(colorRandomWords(words, 1, 'black'));
         return shuffleWords(randomizedWords.reduce((previousValue, currentValue) => [...previousValue, ...currentValue]));
     }
     const gameBoard = randomizeBoard(words);
+
+
     return (
         <Grid className={classes.root} direction={"row"} container justify={"space-between"}>
             {gameBoard}
+            <GameEndDialog
+            open={open}
+            trigger={}
+            handler={}
+            />
         </Grid>
     )
 }

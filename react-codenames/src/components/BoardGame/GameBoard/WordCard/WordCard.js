@@ -47,7 +47,6 @@ const WordCard = props => {
     }
     const handleWordClick = () => {
         setShown(true);
-
         dispatch(decrementCounter(props.wordColor))
     }
 

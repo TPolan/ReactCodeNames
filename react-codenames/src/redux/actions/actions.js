@@ -1,4 +1,4 @@
-export const decrementCounter =  cardType  => {
+export const decrementCounter = cardType => {
     return {
         type: 'DECREMENT_COUNTER',
         payload: cardType

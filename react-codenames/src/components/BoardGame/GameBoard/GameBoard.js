@@ -1,8 +1,10 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Grid} from "@material-ui/core";
 import WordCard from "./WordCard/WordCard";
 import {makeStyles} from "@material-ui/core/styles";
 import GameEndDialog from "./GameEndDialog/GameEndDialog";
+import {useDispatch, useSelector} from "react-redux";
+import {endGame} from "../../../redux/actions/actions";
 
 const useStyles = makeStyles({
     root: {
@@ -13,10 +15,37 @@ const useStyles = makeStyles({
 });
 
 const GameBoard = () => {
-
+    const dispatch = useDispatch();
+    const words = ['Placeholder1', 'Placeholder2', 'Placeholder3', 'Placeholder4', 'Placeholder5', 'Placeholder6', 'Placeholder7', 'Placeholder8', 'Placeholder9', 'Placeholder10', 'Placeholder11', 'Placeholder12', 'Placeholder13', 'Placeholder14', 'Placeholder15', 'Placeholder16', 'Placeholder17', 'Placeholder18', 'Placeholder19', 'Placeholder20', 'Placeholder21', 'Placeholder22', 'Placeholder23', 'Placeholder24', 'Placeholder25']
     const classes = useStyles();
     const [open, setOpen] = useState(false)
-    const words = ['Placeholder1', 'Placeholder2', 'Placeholder3', 'Placeholder4', 'Placeholder5', 'Placeholder6', 'Placeholder7', 'Placeholder8', 'Placeholder9', 'Placeholder10', 'Placeholder11', 'Placeholder12', 'Placeholder13', 'Placeholder14', 'Placeholder15', 'Placeholder16', 'Placeholder17', 'Placeholder18', 'Placeholder19', 'Placeholder20', 'Placeholder21', 'Placeholder22', 'Placeholder23', 'Placeholder24', 'Placeholder25']
+    const [trigger, setTrigger] = useState('red');
+    const redCounter = useSelector(state => state.cards.red);
+    const blueCounter = useSelector(state => state.cards.blue);
+    const blackCounter = useSelector(state => state.cards.black);
+    const redTurn = useSelector(state => state.redTurn);
+
+    const openDialog = (triggerType) => {
+        setTrigger(triggerType);
+        setOpen(!open);
+        dispatch(endGame());
+
+    };
+    useEffect(() => {
+        if (redCounter === 0) {
+            openDialog('red')
+        }
+        if (blueCounter === 0) {
+            openDialog('blue')
+        }
+        if (blackCounter === 0) {
+            openDialog('black')
+        }
+
+    }, [redCounter,blueCounter,blackCounter,openDialog])
+
+
+    }, [])
     const colorRandomWords = (words, wordCount, wordColor) => {
         let coloredWords = [];
         for (let i = 0; i < wordCount; i++) {
@@ -52,14 +81,13 @@ const GameBoard = () => {
     }
     const gameBoard = randomizeBoard(words);
 
-
     return (
         <Grid className={classes.root} direction={"row"} container justify={"space-between"}>
             {gameBoard}
             <GameEndDialog
             open={open}
-            trigger={}
-            handler={}
+            trigger={trigger}
+            handler={openDialog}
             />
         </Grid>
     )

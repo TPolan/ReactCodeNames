@@ -5,13 +5,8 @@ const initialState = {
         grey: 7,
         black: 1
     },
-    gameOver: {
-        redWins: false,
-        blueWins: false,
-        killer: false
-    },
+    gameOver: false,
     redTurn: true
-
 }
 
 const gameReducer = (state = initialState, action) => {
@@ -32,7 +27,8 @@ const gameReducer = (state = initialState, action) => {
             }
         case 'ENDGAME':
             return {
-
+                ...state,
+                gameOver: true
             }
         default:
             return state

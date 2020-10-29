@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Grid, Typography} from "@material-ui/core";
-import { useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {makeStyles} from "@material-ui/core/styles";
+import {endGame} from "../../../redux/actions/actions";
 
 const useStyles = makeStyles({
     Teams: {
@@ -15,9 +16,28 @@ const ScoreBoard = props => {
     const redCounter = useSelector(state => state.cards.red);
     const blueCounter = useSelector(state => state.cards.blue);
     const citizenCounter = useSelector(state => state.cards.grey);
+    const blackCounter = useSelector(state => state.cards.black);
+    const dispatch = useDispatch();
     const redTurn = useSelector(state => state.redTurn);
-    const combineClasses = (colorClass, highlight) => `classes.root classes.${colorClass} classes.${highlight}`;
-    console.log(redTurn);
+
+    // const combineClasses = (colorClass, highlight) => `classes.root classes.${colorClass} classes.${highlight}`;
+
+    useEffect(() => {
+
+        const openDialog = triggerType => {
+            dispatch(endGame(triggerType));
+        }
+        if (redCounter === 0) {
+            openDialog('red');
+        }
+        if (blueCounter === 0) {
+            openDialog('blue');
+        }
+        if (blackCounter === 0) {
+            openDialog('black');
+        }
+
+    }, [redCounter, blueCounter, blackCounter])
 
 
     return (

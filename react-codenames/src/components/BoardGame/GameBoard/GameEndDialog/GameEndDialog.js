@@ -1,8 +1,20 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Dialog, DialogTitle, Typography} from "@material-ui/core";
+import {useSelector} from "react-redux";
 
 const GameEndDialog = props => {
-    const {handler, open, trigger} = props
+
+    const gameOver = useSelector(state => state.gameOver);
+    const trigger = useSelector(state => state.gameOverTrigger);
+    const [open, setOpen] = useState(false);
+
+    useEffect(()=> {
+        if (gameOver) {
+            setOpen(true);
+        }
+    }, [gameOver])
+
+    const closeDialog = () => setOpen(false);
 
     const createEndMessage = (triggerType) => {
         switch (triggerType) {
@@ -33,12 +45,12 @@ const GameEndDialog = props => {
         }
 }
 
-    const endMessage = createEndMessage(trigger);
+    const gameOverMessage = createEndMessage(trigger);
 
     return (
-        <Dialog onClose={handler} aria-labelledby="customized-dialog-title" open={open}>
-            <DialogTitle id="customized-dialog-title" onClose={handler}>
-                {endMessage}
+        <Dialog onClose={closeDialog} aria-labelledby="customized-dialog-title" open={open}>
+            <DialogTitle id="customized-dialog-title" onClose={closeDialog}>
+                {gameOverMessage}
             </DialogTitle>
         </Dialog>
     )

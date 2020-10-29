@@ -6,6 +6,7 @@ const initialState = {
         black: 1
     },
     gameOver: false,
+    gameOverTrigger: '',
     redTurn: true
 }
 
@@ -28,7 +29,8 @@ const gameReducer = (state = initialState, action) => {
         case 'ENDGAME':
             return {
                 ...state,
-                gameOver: true
+                gameOver: true,
+                gameOverTrigger: action.payload
             }
         default:
             return state

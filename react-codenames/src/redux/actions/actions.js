@@ -11,8 +11,9 @@ export const passTurn = () => {
     }
 }
 
-export const endGame = () => {
+export const endGame = triggerType => {
     return {
-        type: 'ENDGAME'
+        type: 'ENDGAME',
+        payload: triggerType
     }
 }

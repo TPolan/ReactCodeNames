@@ -7,7 +7,9 @@ const initialState = {
     },
     gameOver: false,
     gameOverTrigger: '',
-    redTurn: true
+    redTurn: true,
+    spymaster: false,
+    words: []
 }
 
 const gameReducer = (state = initialState, action) => {
@@ -26,11 +28,22 @@ const gameReducer = (state = initialState, action) => {
                 ...state,
                 redTurn: !state.redTurn
             }
-        case 'ENDGAME':
+        case 'END_GAME':
             return {
                 ...state,
                 gameOver: true,
                 gameOverTrigger: action.payload
+            }
+        case 'NEW_GAME':
+            return {
+                ...state,
+                gameOver: true,
+                gameOverTrigger: action.payload
+            }
+        case 'SWITCH_VIEW':
+            return {
+                ...state,
+                spymaster: !state.spymaster
             }
         default:
             return state

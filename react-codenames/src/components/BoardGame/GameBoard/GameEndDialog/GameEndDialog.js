@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {Dialog, DialogTitle, Typography} from "@material-ui/core";
+import {Button, Dialog, DialogTitle, Grid, Typography} from "@material-ui/core";
 import {useSelector} from "react-redux";
+import DialogActions from "@material-ui/core/DialogActions";
 
 const GameEndDialog = props => {
 
@@ -52,6 +53,11 @@ const GameEndDialog = props => {
             <DialogTitle id="customized-dialog-title" onClose={closeDialog}>
                 {gameOverMessage}
             </DialogTitle>
+            <DialogActions>
+                <Grid container justify={"center"}>
+                    <Button item onClick={() => window.location.reload(false)}>Reset Game</Button>
+                </Grid>
+            </DialogActions>
         </Dialog>
     )
 }

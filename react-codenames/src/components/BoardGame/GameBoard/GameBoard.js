@@ -1,9 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {Grid} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import GameEndDialog from "./GameEndDialog/GameEndDialog";
-import {useDispatch, useSelector} from "react-redux";
-import {endGame} from "../../../redux/actions/actions";
 
 const useStyles = makeStyles({
     root: {

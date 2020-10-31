@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button, Card, CardContent, Grid, Typography} from "@material-ui/core";
 import {makeStyles} from '@material-ui/core/styles';
-import {useDispatch} from "react-redux";
-import {decrementCounter, endGameKiller} from "../../../../redux/actions/actions";
+import {useDispatch, useSelector} from "react-redux";
+import {decrementCounter} from "../../../../redux/actions/actions";
 
 const useStyles = makeStyles({
     root: {
@@ -37,19 +37,21 @@ const WordCard = props => {
 
     const dispatch = useDispatch();
 
-    const {word, index} = props;
+    const {word, index, Spymaster} = props;
     const classes = useStyles(props);
-    const [shown, setShown] = useState(false)
-    const deathCheck = (cardColor) => {
-        if (cardColor === 'black' && shown) {
-            dispatch(decrementCounter(props.wordColor));
-        }
-    }
+    const [clicked, setShown] = useState(false);
+    const gameOver = useSelector(state => state.gameOver);
+    const spymasterViewOn = useSelector(state => state.spymaster);
     const handleWordClick = () => {
         setShown(true);
         dispatch(decrementCounter(props.wordColor))
-    }
-
+    };
+    useEffect(()=> {
+        if (gameOver) {
+            setShown(true);
+        }
+    }, [gameOver,setShown]);
+    const shown = clicked || gameOver || spymasterViewOn;
     return (
         <Grid  item className={classes.root} key={`${word + index}`}>
             <Button disabled={shown} onClick={handleWordClick}>

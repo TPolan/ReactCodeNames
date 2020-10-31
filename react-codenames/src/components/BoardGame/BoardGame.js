@@ -30,7 +30,7 @@ const BoardGame = () => {
             words[j] = temp;
         }
         return words;
-    }
+    };
 
     const randomizeBoard = (words) => {
         let randomizedWords = [];
@@ -39,7 +39,7 @@ const BoardGame = () => {
         randomizedWords.push(colorRandomWords(words, 7, 'grey'));
         randomizedWords.push(colorRandomWords(words, 1, 'black'));
         return shuffleWords(randomizedWords.reduce((previousValue, currentValue) => [...previousValue, ...currentValue]));
-    }
+    };
 
     const gameBoard = randomizeBoard(words);
 
@@ -50,6 +50,6 @@ const BoardGame = () => {
             <ControlPanel/>
         </Container>
     )
-}
+};
 
 export default BoardGame;

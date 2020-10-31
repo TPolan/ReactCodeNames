@@ -37,7 +37,7 @@ const WordCard = props => {
 
     const dispatch = useDispatch();
 
-    const {word, index, Spymaster} = props;
+    const {word, index} = props;
     const classes = useStyles(props);
     const [clicked, setShown] = useState(false);
     const gameOver = useSelector(state => state.gameOver);
@@ -46,14 +46,14 @@ const WordCard = props => {
         setShown(true);
         dispatch(decrementCounter(props.wordColor))
     };
-    useEffect(()=> {
+    useEffect(() => {
         if (gameOver) {
             setShown(true);
         }
-    }, [gameOver,setShown]);
+    }, [gameOver, setShown]);
     const shown = clicked || gameOver || spymasterViewOn;
     return (
-        <Grid  item className={classes.root} key={`${word + index}`}>
+        <Grid item className={classes.root} key={`${word + index}`}>
             <Button disabled={shown} onClick={handleWordClick}>
                 <Card className={shown ? classes.border_shown : classes.border_hidden} variant="outlined">
                     <CardContent>

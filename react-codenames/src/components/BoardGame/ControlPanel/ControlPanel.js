@@ -1,12 +1,11 @@
 import React, {useState} from 'react';
-import {Button, ButtonGroup, Grid} from "@material-ui/core";
-import {useDispatch, useSelector} from "react-redux";
+import {Button, Grid} from "@material-ui/core";
+import {useDispatch} from "react-redux";
 import {passTurn, switchView} from "../../../redux/actions/actions";
 import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 const ControlPanel = () => {
-    const spymasterOn = useSelector(state => state.spymaster);
     const dispatch = useDispatch();
     const [switchOn, setSwitchOn] = useState(false);
     const pass = () => {
@@ -21,11 +20,11 @@ const ControlPanel = () => {
     return (
         <Grid container justify={"space-evenly"}>
             <FormControlLabel
-                control={ <Switch
+                control={<Switch
                     checked={switchOn}
                     onChange={handleChange}
                     name="checkedA"
-                    inputProps={{ 'aria-label': 'secondary checkbox' }}
+                    inputProps={{'aria-label': 'secondary checkbox'}}
                 />}
                 label="Spymaster"
             />

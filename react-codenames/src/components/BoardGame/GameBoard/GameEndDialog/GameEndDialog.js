@@ -3,7 +3,7 @@ import {Button, Dialog, DialogTitle, Grid, Typography} from "@material-ui/core";
 import {useSelector} from "react-redux";
 import DialogActions from "@material-ui/core/DialogActions";
 
-const GameEndDialog = props => {
+const GameEndDialog = () => {
 
     const gameOver = useSelector(state => state.gameOver);
     const trigger = useSelector(state => state.gameOverTrigger);

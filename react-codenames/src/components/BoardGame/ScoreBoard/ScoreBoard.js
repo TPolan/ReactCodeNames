@@ -1,17 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {Grid, Typography} from "@material-ui/core";
 import {useDispatch, useSelector} from "react-redux";
-import {makeStyles} from "@material-ui/core/styles";
 import {endGame} from "../../../redux/actions/actions";
 
-const useStyles = makeStyles({
-    Teams: {
 
-    }
-});
-
-
-const ScoreBoard = props => {
+const ScoreBoard = () => {
 
     const redCounter = useSelector(state => state.cards.red);
     const blueCounter = useSelector(state => state.cards.blue);
@@ -37,7 +30,7 @@ const ScoreBoard = props => {
             openDialog('black');
         }
 
-    }, [redCounter, blueCounter, blackCounter])
+    }, [redCounter, blueCounter, blackCounter, dispatch])
 
 
     return (

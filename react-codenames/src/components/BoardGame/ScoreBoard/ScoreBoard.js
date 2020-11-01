@@ -5,45 +5,42 @@ import {endGame} from "../../../redux/actions/actions";
 
 
 const ScoreBoard = () => {
-
-    const redCounter = useSelector(state => state.cards.red);
-    const blueCounter = useSelector(state => state.cards.blue);
-    const citizenCounter = useSelector(state => state.cards.grey);
-    const blackCounter = useSelector(state => state.cards.black);
+    const {gameCode, redTurn} = useSelector(state => state)
+    const {red, blue, grey, black} = useSelector(state => state.cards);
     const dispatch = useDispatch();
-    const redTurn = useSelector(state => state.redTurn);
+
 
     // const combineClasses = (colorClass, highlight) => `classes.root classes.${colorClass} classes.${highlight}`;
 
     useEffect(() => {
+        if (red === 0) {
+            dispatch(endGame('red'));
+        }
+        if (blue === 0) {
+            dispatch(endGame('blue'));
+        }
+        if (black === 0) {
+            dispatch(endGame('black'));
+        }
+        if (redTurn) {
 
-        const openDialog = triggerType => {
-            dispatch(endGame(triggerType));
-        }
-        if (redCounter === 0) {
-            openDialog('red');
-        }
-        if (blueCounter === 0) {
-            openDialog('blue');
-        }
-        if (blackCounter === 0) {
-            openDialog('black');
         }
 
-    }, [redCounter, blueCounter, blackCounter, dispatch])
+    }, [red, blue, black, dispatch])
 
 
     return (
         <Grid container justify={"center"}>
+            <Typography variant={'h2'} >Game code: {gameCode}</Typography>
             <Grid item container justify={"space-around"}>
                 <Typography item style={{color: 'red'}} variant={"h2"}>
-                    {redCounter}
+                    {red}
                 </Typography>
                 <Typography item style={{color: 'grey'}} variant={"h2"}>
-                    {citizenCounter}
+                    {grey}
                 </Typography>
                 <Typography item style={{color: 'blue'}} variant={"h2"}>
-                    {blueCounter}
+                    {blue}
                 </Typography>
             </Grid>
             <Grid item>

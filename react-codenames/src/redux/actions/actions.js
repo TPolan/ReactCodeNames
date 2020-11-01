@@ -19,9 +19,13 @@ export const endGame = triggerType => {
 };
 
 
-export const newGame = () => {
+export const newGame = (payload) => {
     return {
-        type: 'NEW_GAME'
+        type: 'NEW_GAME',
+        payload: {
+            customWords: payload.customWords,
+            gameCode: payload.gameCode
+        }
     }
 
 };
@@ -30,4 +34,4 @@ export const switchView = () => {
     return {
         type: 'SWITCH_VIEW'
     }
-};
+}

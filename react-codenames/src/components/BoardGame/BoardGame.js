@@ -1,12 +1,24 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Container} from "@material-ui/core";
 import GameBoard from "./GameBoard/GameBoard";
 import ScoreBoard from "./ScoreBoard/ScoreBoard";
 import ControlPanel from "./ControlPanel/ControlPanel";
 import WordCard from "./GameBoard/WordCard/WordCard";
+import {useSelector} from "react-redux";
 
 const BoardGame = () => {
-    const words = ['Placeholder1', 'Placeholder2', 'Placeholder3', 'Placeholder4', 'Placeholder5', 'Placeholder6', 'Placeholder7', 'Placeholder8', 'Placeholder9', 'Placeholder10', 'Placeholder11', 'Placeholder12', 'Placeholder13', 'Placeholder14', 'Placeholder15', 'Placeholder16', 'Placeholder17', 'Placeholder18', 'Placeholder19', 'Placeholder20', 'Placeholder21', 'Placeholder22', 'Placeholder23', 'Placeholder24', 'Placeholder25']
+    const {customWords, defaultWords} = useSelector(state => state);
+    const pickRandomWords = (wordPool) => {
+        const randomWords = [];
+        for (let i = 0; i < 25; i++) {
+            const randomIndex = Math.floor(Math.random() * wordPool.length);
+            let randomWord = wordPool.splice(randomIndex, 1)
+            randomWords.push(randomWord)
+        }
+        return randomWords;
+    };
+    const words = pickRandomWords([...customWords, ...defaultWords]);
+
     const colorRandomWords = (words, wordCount, wordColor) => {
         let coloredWords = [];
         for (let i = 0; i < wordCount; i++) {

@@ -9,7 +9,15 @@ const initialState = {
     gameOverTrigger: '',
     redTurn: true,
     spymaster: false,
-    words: []
+    customWords:[],
+    gameCode: '',
+    defaultWords: [
+        'Anglie', 'Nemecko', 'Francie', 'Amerika', 'Afrika',
+        'Pilot', 'Psycholog', 'Podkova', 'Boty', 'Rukavice',
+        'Šála', 'Stůl', 'Židle', 'Skříň', 'Svetr',
+        'Postel', 'Vlk', 'Slon', 'Pes', 'Kočka',
+        'Tank', 'Hora', 'Pošta', 'Karta', 'Planeta'
+    ],
 }
 
 const gameReducer = (state = initialState, action) => {
@@ -37,8 +45,12 @@ const gameReducer = (state = initialState, action) => {
         case 'NEW_GAME':
             return {
                 ...state,
-                gameOver: true,
-                gameOverTrigger: action.payload
+                gameOver: false,
+                customWords: [payload.customWords],
+                gameCode: [payload.gameCode]
+                /*
+                    heres gonna be thunk getting basic words from firebase
+                 */
             }
         case 'SWITCH_VIEW':
             return {

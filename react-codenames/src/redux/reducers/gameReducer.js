@@ -9,9 +9,8 @@ const initialState = {
     gameOverTrigger: '',
     redTurn: true,
     spymaster: false,
-    customWords:[],
     gameCode: '',
-    defaultWords: [
+    words: [
         'Anglie', 'Nemecko', 'Francie', 'Amerika', 'Afrika',
         'Pilot', 'Psycholog', 'Podkova', 'Boty', 'Rukavice',
         'Šála', 'Stůl', 'Židle', 'Skříň', 'Svetr',
@@ -46,8 +45,8 @@ const gameReducer = (state = initialState, action) => {
             return {
                 ...state,
                 gameOver: false,
-                customWords: [payload.customWords],
-                gameCode: [payload.gameCode]
+                words: [...state.words,...payload.customWords],
+                gameCode: payload.gameCode
                 /*
                     heres gonna be thunk getting basic words from firebase
                  */

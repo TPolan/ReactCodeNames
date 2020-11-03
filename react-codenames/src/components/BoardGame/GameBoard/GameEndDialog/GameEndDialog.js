@@ -55,7 +55,7 @@ const GameEndDialog = () => {
             </DialogTitle>
             <DialogActions>
                 <Grid container justify={"center"}>
-                    <Button item onClick={() => window.location.reload(false)}>Reset Game</Button>
+                    <Button item onClick={() => window.location.reload(false)}>New Game</Button>
                 </Grid>
             </DialogActions>
         </Dialog>

@@ -25,8 +25,7 @@ const ScoreBoard = () => {
         if (redTurn) {
 
         }
-
-    }, [red, blue, black, dispatch])
+    }, [red, blue, black, dispatch, redTurn])
 
 
     return (

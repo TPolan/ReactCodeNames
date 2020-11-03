@@ -14,8 +14,6 @@ const useStyles = makeStyles({
 const GameBoard = props => {
     const classes = useStyles();
 
-
-
     return (
         <Grid className={classes.root} direction={"row"} container justify={"space-between"}>
             {props.board}

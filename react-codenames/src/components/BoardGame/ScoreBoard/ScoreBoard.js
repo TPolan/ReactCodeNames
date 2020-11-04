@@ -3,14 +3,10 @@ import {Grid, Typography} from "@material-ui/core";
 import {useDispatch, useSelector} from "react-redux";
 import {endGame} from "../../../redux/actions/actions";
 
-
 const ScoreBoard = () => {
     const {gameCode, redTurn} = useSelector(state => state)
     const {red, blue, grey, black} = useSelector(state => state.cards);
     const dispatch = useDispatch();
-
-
-    // const combineClasses = (colorClass, highlight) => `classes.root classes.${colorClass} classes.${highlight}`;
 
     useEffect(() => {
         if (red === 0) {
@@ -44,22 +40,22 @@ const ScoreBoard = () => {
             </Grid>
             <Grid item>
                 {redTurn ?
-                    <>
-                        <Typography style={{color:'red'}} variant={"h3"}>
-                            Team Red
+                    <Grid container >
+                        <Typography item style={{color:'red',padding:8}} variant={"h3"}>
+                             Red Turn
                         </Typography>
-                        <Typography style={{color:'blue'}} variant={"h6"}>
-                            Team Blue
+                        <Typography item style={{color:'blue',padding:8}} variant={"h6"}>
+                             Blue Turn
                         </Typography>
-                    </> :
-                    <>
-                        <Typography style={{color:'red'}} variant={"h6"}>
-                            Team Red
+                    </Grid> :
+                    <Grid container>
+                        <Typography item style={{color:'red',padding:8}} variant={"h6"}>
+                            Red Turn
                         </Typography>
-                        <Typography style={{color:'blue'}} variant={"h3"}>
-                            Team Blue
+                        <Typography item style={{color:'blue',padding:8}} variant={"h3"}>
+                            Blue Turn
                         </Typography>
-                    </>
+                    </Grid>
                 }
             </Grid>
         </Grid>

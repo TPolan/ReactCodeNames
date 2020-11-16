@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export const decrementCounter = cardType => {
     return {
         type: 'DECREMENT_COUNTER',
@@ -28,6 +30,15 @@ export const newGame = (payload) => {
         }
     }
 
+};
+
+export const createNewGame = (payload) => {
+    return dispatch => {
+        axios.post(`https://reactcodenames-7a986.firebaseio.com/${payload.gameCode}.json`, payload)
+            .then(response => console.log(response.data));
+
+        dispatch(newGame(payload));
+    }
 };
 
 export const switchView = () => {

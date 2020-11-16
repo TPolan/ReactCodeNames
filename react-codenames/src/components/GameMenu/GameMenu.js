@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Button, Grid, TextField, Typography} from "@material-ui/core";
 import {useDispatch} from "react-redux";
-import {newGame} from "../../redux/actions/actions";
+import {createNewGame} from "../../redux/actions/actions";
 
 const GameMenu = props => {
     const dispatch = useDispatch();
@@ -15,13 +15,13 @@ const GameMenu = props => {
             customWords: wordPool.split(','),
             gameCode: gameCode
         }
-        dispatch(newGame(payload));
+        dispatch(createNewGame(payload));
         // props.history.push('/'+ gameCode);
         props.history.push('/game');
     };
 
     const handleChange = event => {
-       setCustomWords(event.target.value);
+        setCustomWords(event.target.value);
     };
 
     const handleChangeCode = event => {

@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Button, Grid} from "@material-ui/core";
 import {useDispatch, useSelector} from "react-redux";
-import {passTurn, switchView} from "../../../redux/actions/actions";
+import {newGame, passTurn, switchView} from "../../../redux/actions/actions";
 import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 
@@ -16,6 +16,9 @@ const ControlPanel = () => {
     const handleChange = () => {
         setSwitchOn(!switchOn);
         dispatch(switchView());
+    };
+    const handleNewGame = () => {
+        dispatch(newGame());
     };
 
     return (
@@ -32,7 +35,7 @@ const ControlPanel = () => {
             />
 
             <Button onClick={pass}>Pass Turn</Button>
-            <Button onClick={() => window.location.reload(false)}>New Game</Button>
+            <Button onClick={() => handleNewGame}>New Game</Button>
         </Grid>
     )
 }

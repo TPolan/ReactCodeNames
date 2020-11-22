@@ -47,7 +47,7 @@ const GameMenu = props => {
                 rowsMax={4}
                 value={customWords}
                 onChange={handleChange}
-                helperText='separated by comma'
+                helperText='Use comma to separate words'
             />
 
         </Grid>

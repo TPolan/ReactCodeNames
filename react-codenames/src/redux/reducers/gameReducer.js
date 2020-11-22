@@ -50,12 +50,17 @@ const gameReducer = (state = initialState, action) => {
                 words: [...payload.words],
                 gameCode: payload.gameCode,
                 wordMap: payload.wordMap,
-                randomizedGameBoard: payload.randomizedGameBoard
+                randomizedGameBoard: payload.randomizedGameBoard,
+                firebaseCode: payload.firebaseCode
             }
         case 'SWITCH_VIEW':
             return {
                 ...state,
                 spymaster: !state.spymaster
+            }
+        case 'CLOSE_LOBBY':
+            return {
+                ...initialState
             }
         default:
             return state

@@ -5,7 +5,7 @@ import ScoreBoard from "./ScoreBoard/ScoreBoard";
 import ControlPanel from "./ControlPanel/ControlPanel";
 import {useSelector} from "react-redux";
 
-const BoardGame = () => {
+const BoardGame = props => {
     const {randomizedGameBoard} = useSelector(state => state);
     const [board, setBoard] = useState([])
     useEffect(() => {
@@ -17,7 +17,7 @@ const BoardGame = () => {
         <Container fixed>
             <ScoreBoard/>
             <GameBoard board={board}/>
-            <ControlPanel/>
+            <ControlPanel history={props.history}/>
         </Container>
     )
 };

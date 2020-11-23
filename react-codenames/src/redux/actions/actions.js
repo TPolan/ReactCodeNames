@@ -49,16 +49,13 @@ const shuffleWords = (words) => {
 };
 
 const randomizeBoard = (words) => {
-    let randomizedWords = [];
-    randomizedWords.push(colorRandomWords(words, 9, 'red'));
-    randomizedWords.push(colorRandomWords(words, 8, 'blue'));
-    randomizedWords.push(colorRandomWords(words, 7, 'grey'));
-    randomizedWords.push(colorRandomWords(words, 1, 'black'));
-    return shuffleWords(randomizedWords.reduce((previousValue, currentValue) => [...previousValue, ...currentValue]));
-};
-
-const randomizeGameBoard = (words) => {
-    return randomizeBoard(pickRandomWords(words));
+    let randomWords = pickRandomWords(words)
+    let randomizedColoredWords = [];
+    randomizedColoredWords.push(colorRandomWords(randomWords, 9, 'red'));
+    randomizedColoredWords.push(colorRandomWords(randomWords, 8, 'blue'));
+    randomizedColoredWords.push(colorRandomWords(randomWords, 7, 'grey'));
+    randomizedColoredWords.push(colorRandomWords(randomWords, 1, 'black'));
+    return shuffleWords(randomizedColoredWords.reduce((previousValue, currentValue) => [...previousValue, ...currentValue]));
 };
 
 export const decrementCounter = cardType => {
@@ -89,7 +86,7 @@ export const newGame = (payload) => {
             gameOver: false,
             gameOverTrigger: '',
             gameCode: payload.gameCode,
-            randomizedGameBoard: randomizeGameBoard(payload.words),
+            randomizedGameBoard: randomizeBoard(payload.words),
             words: payload.words,
             wordMap: createWordMap(),
         }
@@ -121,7 +118,7 @@ export const createNewGame = (payload) => {
 
 export const passTurn = () => {
     return (dispatch, getState) => {
-        axios.put(`https://reactcodenames-7a986.firebaseio.com/${getState().gameCode}/redTurn.json`, {redTurn: false})
+        axios.patch(`https://reactcodenames-7a986.firebaseio.com/${getState().gameCode}.json`, {redTurn: !getState().redTurn})
             .then(dispatch({type: 'PASS_TURN'}))
     }
 

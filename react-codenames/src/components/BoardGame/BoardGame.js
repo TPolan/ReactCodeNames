@@ -6,7 +6,7 @@ import ControlPanel from "./ControlPanel/ControlPanel";
 import {useSelector} from "react-redux";
 
 const BoardGame = props => {
-    const {randomizedGameBoard} = useSelector(state => state);
+    const randomizedGameBoard = useSelector(state => state.randomizedGameBoard);
     const [board, setBoard] = useState([])
     useEffect(() => {
         setBoard(randomizedGameBoard);

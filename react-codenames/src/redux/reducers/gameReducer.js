@@ -29,7 +29,7 @@ const gameReducer = (state = initialState, action) => {
                 ...state,
                 cards: {
                     ...state.cards,
-                    [payload]: state.cards[payload] - 1
+                   ...payload.cards
                 }
             }
         case 'PASS_TURN':
@@ -41,7 +41,7 @@ const gameReducer = (state = initialState, action) => {
             return {
                 ...state,
                 gameOver: true,
-                gameOverTrigger: action.payload
+                gameOverTrigger: payload
             }
         case 'NEW_GAME':
             return {
@@ -50,8 +50,7 @@ const gameReducer = (state = initialState, action) => {
                 words: [...payload.words],
                 gameCode: payload.gameCode,
                 wordMap: payload.wordMap,
-                randomizedGameBoard: payload.randomizedGameBoard,
-                firebaseCode: payload.firebaseCode
+                randomizedGameBoard: payload.board,
             }
         case 'SWITCH_VIEW':
             return {

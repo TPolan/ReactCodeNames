@@ -1,21 +1,24 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Dialog, DialogTitle, Grid, Typography} from "@material-ui/core";
-import {useSelector} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
 import DialogActions from "@material-ui/core/DialogActions";
+import {createNewGame} from "../../../../redux/actions/actions";
 
 const GameEndDialog = () => {
 
-    const gameOver = useSelector(state => state.gameOver);
-    const trigger = useSelector(state => state.gameOverTrigger);
+    const {gameOver, gameOverTrigger, words, gameCode} = useSelector(state => state);
     const [open, setOpen] = useState(false);
+    const dispatch = useDispatch();
 
     useEffect(()=> {
         if (gameOver) {
             setOpen(true);
         }
     }, [gameOver])
-
     const closeDialog = () => setOpen(false);
+    const handleNewGame = () => {
+        dispatch(createNewGame({words, gameCode}));
+    };
 
     const createEndMessage = (triggerType) => {
         switch (triggerType) {
@@ -46,7 +49,7 @@ const GameEndDialog = () => {
         }
 }
 
-    const gameOverMessage = createEndMessage(trigger);
+    const gameOverMessage = createEndMessage(gameOverTrigger);
 
     return (
         <Dialog onClose={closeDialog} aria-labelledby="customized-dialog-title" open={open}>
@@ -55,7 +58,7 @@ const GameEndDialog = () => {
             </DialogTitle>
             <DialogActions>
                 <Grid container justify={"center"}>
-                    <Button item onClick={() => window.location.reload(false)}>New Game</Button>
+                    <Button item onClick={handleNewGame}>New Game</Button>
                 </Grid>
             </DialogActions>
         </Dialog>

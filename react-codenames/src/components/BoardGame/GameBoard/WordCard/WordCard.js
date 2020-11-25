@@ -48,7 +48,10 @@ const WordCard = props => {
     const {gameOver,spymaster, redTurn} = useSelector(state => state);
     const handleWordClick = () => {
         setShown(true);
-        dispatch(decrementCounter(props.wordColor))
+        dispatch(decrementCounter({
+            color: props.wordColor,
+            index:index
+        }))
         if (redTurn && (props.wordColor === 'blue' || props.wordColor === 'grey')) {
             dispatch(passTurn());
         }

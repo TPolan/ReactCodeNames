@@ -1,6 +1,4 @@
 import axios from "axios";
-import WordCard from "../../components/BoardGame/GameBoard/WordCard/WordCard";
-import React from "react";
 
 const pickRandomWords = (wordPool) => {
     const randomWords = [];
@@ -19,12 +17,9 @@ const colorRandomWords = (words, wordCount, wordColor) => {
         let randWord = words.splice(randomIndex, 1)
         coloredWords.push(
             {
-                wordIndex: randomIndex,
-                component: <WordCard
-                    word={randWord[0]}
-                    wordColor={wordColor}
-                    index={randomIndex}
-                />
+                word: randWord[0],
+                color: wordColor,
+                isShown: false
             }
         )
     }
@@ -48,18 +43,8 @@ const randomizeBoard = (words) => {
     randomizedColoredWords.push(colorRandomWords(randomWords, 8, 'blue'));
     randomizedColoredWords.push(colorRandomWords(randomWords, 7, 'grey'));
     randomizedColoredWords.push(colorRandomWords(randomWords, 1, 'black'));
-    const shuffledRandColoredWords = shuffleWords(randomizedColoredWords.reduce((previousValue, currentValue) => [...previousValue, ...currentValue]));
-    const wordMap = shuffledRandColoredWords.map((item, index) => {
-        return {
-            boardIndex: index,
-            isShown: false
-        }
-    });
-    const board = shuffledRandColoredWords.map(item => {
-        return item.component
-    });
-    return {wordMap, board};
-};
+    return shuffleWords(randomizedColoredWords.reduce((previousValue, currentValue) => [...previousValue, ...currentValue]));
+}
 
 export const decrementCounter = payload => {
     return (dispatch, getState) => {
@@ -79,16 +64,22 @@ export const decrementCounter = payload => {
 
 export const updateWordMap = payload => {
     return (dispatch, getState) => {
-        const updatedWordMap = {
-            wordMap: [
-                ...getState().wordMap,
+        const updateWord = () => {
+            return getState().wordMap.map( (word, index)=> {
+                if (index === payload.index) {
+                    word.isShown = true
+                }
+                return word;
+            })
 
-            ],
+        };
+        const updatedWordMap = {
+            wordMap: updateWord()
         }
-        axios.patch(`https://reactcodenames-7a986.firebaseio.com/${getState().gameCode}/wordMap/${1}.json`, true)
+        axios.patch(`https://reactcodenames-7a986.firebaseio.com/${getState().gameCode}.json`, updatedWordMap)
             .then(dispatch(    {
-                type: 'UPDATE_WORDMAP',
-                payload: {...updatedWordMap}
+                type: 'UPDATE_WORD_MAP',
+                payload: updatedWordMap
             }))
     }
 };
@@ -106,7 +97,7 @@ export const endGame = triggerType => {
     }
 };
 
-export const createNewGame = (payload = {}) => {
+export const createNewGame = (payload) => {
     return (dispatch, getState) => {
         const initialState = getState();
         const combineWordPool = () => {
@@ -116,14 +107,13 @@ export const createNewGame = (payload = {}) => {
             return [...initialState.words]
         };
         const combinedWordPool = combineWordPool();
-        const {wordMap, board} = randomizeBoard(combinedWordPool);
+        const board = randomizeBoard(combinedWordPool);
         const updatedPayload =
             {
                 ...initialState,
                 words:combinedWordPool,
                 gameCode: payload.gameCode,
-                wordMap: wordMap
-
+                wordMap: board
             }
         axios.put(`https://reactcodenames-7a986.firebaseio.com/${payload.gameCode}.json`, updatedPayload)
             .then(response => {
@@ -135,8 +125,7 @@ export const createNewGame = (payload = {}) => {
                             gameCode: payload.gameCode,
                             gameOver: false,
                             gameOverTrigger: '',
-                            board: board,
-                            wordMap: wordMap,
+                            wordMap: board,
                         }
                     });
                 }

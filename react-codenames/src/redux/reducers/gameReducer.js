@@ -1,5 +1,4 @@
 const initialState = {
-    randomizedGameBoard:[],
     wordMap:[],
     cards: {
         red: 9,
@@ -31,6 +30,11 @@ const gameReducer = (state = initialState, action) => {
                     ...state.cards,
                    ...payload.cards
                 }
+            }
+        case 'UPDATE_WORD_MAP':
+            return {
+                ...state,
+                wordMap: [...payload.wordMap]
             }
         case 'PASS_TURN':
             return {

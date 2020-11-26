@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Button, Card, CardContent, Grid, Typography} from "@material-ui/core";
 import {makeStyles} from '@material-ui/core/styles';
 import {useDispatch, useSelector} from "react-redux";
-import {decrementCounter, passTurn} from "../../../../redux/actions/actions";
+import {decrementCounter, passTurn, updateWordMap} from "../../../../redux/actions/actions";
 
 
 const useStyles = makeStyles({
@@ -22,7 +22,7 @@ const useStyles = makeStyles({
         width: 150,
         backgroundColor: "whitesmoke",
         borderStyle: "dashed",
-        borderColor: props => props.wordColor,
+        borderColor: props => props.color,
         borderWidth: 4,
         color: "black",
     },
@@ -30,10 +30,10 @@ const useStyles = makeStyles({
         width: 150,
         backgroundColor: "lightgray",
         borderStyle: "solid",
-        borderColor: props => props.wordColor,
+        borderColor: props => props.color,
         borderWidth: 4,
         '& p': {
-        color: props => props.wordColor
+        color: props => props.color
         },
     },
 
@@ -42,20 +42,22 @@ const useStyles = makeStyles({
 
 const WordCard = props => {
     const dispatch = useDispatch();
-    const {word, index} = props;
+    const {word, index, color} = props;
     const classes = useStyles(props);
     const [clicked, setShown] = useState(false);
     const {gameOver,spymaster, redTurn} = useSelector(state => state);
     const handleWordClick = () => {
         setShown(true);
         dispatch(decrementCounter({
-            color: props.wordColor,
-            index:index
-        }))
-        if (redTurn && (props.wordColor === 'blue' || props.wordColor === 'grey')) {
+            color: color,
+        }));
+        dispatch(updateWordMap(
+            {index: index}
+        ));
+        if (redTurn && (color === 'blue' || color === 'grey')) {
             dispatch(passTurn());
         }
-        if (!redTurn && (props.wordColor === 'red' || props.wordColor === 'grey')) {
+        if (!redTurn && (color === 'red' || color === 'grey')) {
             dispatch(passTurn());
         }
     };

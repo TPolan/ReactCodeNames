@@ -91,9 +91,12 @@ export const switchView = () => {
 };
 
 export const endGame = triggerType => {
-    return {
-        type: 'END_GAME',
-        payload: triggerType
+    return (dispatch, getState) => {
+        axios.patch(`https://reactcodenames-7a986.firebaseio.com/${getState().gameCode}.json`, {gameOverTrigger: triggerType, gameOver: true})
+            .then(dispatch({
+                type: 'END_GAME',
+                payload: triggerType
+            }))
     }
 };
 

@@ -51,11 +51,11 @@ export const decrementCounter = payload => {
         const updatedCardCount = {
             cards: {
                 ...getState().cards,
-                [payload.color]: getState().cards[payload.color] -1
+                [payload.color]: getState().cards[payload.color] - 1
             }
         }
         axios.patch(`https://reactcodenames-7a986.firebaseio.com/${getState().gameCode}.json`, updatedCardCount)
-            .then(dispatch(    {
+            .then(dispatch({
                 type: 'DECREMENT_COUNTER',
                 payload: {...updatedCardCount}
             }))
@@ -65,7 +65,7 @@ export const decrementCounter = payload => {
 export const updateWordMap = payload => {
     return (dispatch, getState) => {
         const updateWord = () => {
-            return getState().wordMap.map( (word, index)=> {
+            return getState().wordMap.map((word, index) => {
                 if (index === payload.index) {
                     word.isShown = true
                 }
@@ -77,7 +77,7 @@ export const updateWordMap = payload => {
             wordMap: updateWord()
         }
         axios.patch(`https://reactcodenames-7a986.firebaseio.com/${getState().gameCode}.json`, updatedWordMap)
-            .then(dispatch(    {
+            .then(dispatch({
                 type: 'UPDATE_WORD_MAP',
                 payload: updatedWordMap
             }))
@@ -92,11 +92,44 @@ export const switchView = () => {
 
 export const endGame = triggerType => {
     return (dispatch, getState) => {
-        axios.patch(`https://reactcodenames-7a986.firebaseio.com/${getState().gameCode}.json`, {gameOverTrigger: triggerType, gameOver: true})
+        axios.patch(`https://reactcodenames-7a986.firebaseio.com/${getState().gameCode}.json`, {
+            gameOverTrigger: triggerType,
+            gameOver: true
+        })
             .then(dispatch({
                 type: 'END_GAME',
                 payload: triggerType
             }))
+    }
+};
+
+export const joinGame = payload => {
+    return dispatch => {
+        const {gameCode} = payload;
+        axios.get(`https://reactcodenames-7a986.firebaseio.com/${gameCode}.json`)
+            .then(response => {
+                dispatch({
+                    type: 'JOIN_GAME',
+                    payload: {
+                        ...response.data
+                    }
+                })
+            })
+    }
+};
+
+export const checkGameStatus = payload => {
+    return (dispatch) => {
+        axios.get(`https://reactcodenames-7a986.firebaseio.com/${payload.gameCode}.json`)
+            .then(response => {
+                    if (response.data) {
+                        dispatch(joinGame(payload))
+                    } else {
+                        dispatch(createNewGame(payload))
+                    }
+                }
+            )
+            .catch(error => console.log(error))
     }
 };
 
@@ -114,7 +147,7 @@ export const createNewGame = payload => {
         const updatedPayload =
             {
                 ...initialState,
-                words:combinedWordPool,
+                words: combinedWordPool,
                 gameCode: payload.gameCode,
                 wordMap: board
             }

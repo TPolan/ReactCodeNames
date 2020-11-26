@@ -36,6 +36,10 @@ const gameReducer = (state = initialState, action) => {
                 ...state,
                 wordMap: [...payload.wordMap]
             }
+        case 'JOIN_GAME':
+            return {
+                ...payload
+            }
         case 'PASS_TURN':
             return {
                 ...state,

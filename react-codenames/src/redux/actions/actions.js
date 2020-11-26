@@ -36,8 +36,8 @@ const shuffleWords = (words) => {
     return words;
 };
 
-const randomizeBoard = (words) => {
-    let randomWords = pickRandomWords(words);
+const randomizeBoard = words => {
+    let randomWords = pickRandomWords([...words]);
     let randomizedColoredWords = [];
     randomizedColoredWords.push(colorRandomWords(randomWords, 9, 'red'));
     randomizedColoredWords.push(colorRandomWords(randomWords, 8, 'blue'));
@@ -100,11 +100,11 @@ export const endGame = triggerType => {
     }
 };
 
-export const createNewGame = (payload) => {
+export const createNewGame = payload => {
     return (dispatch, getState) => {
         const initialState = getState();
         const combineWordPool = () => {
-            if (payload.customWords) {
+            if (payload.customWords[0] !== '') {
                 return [...initialState.words, ...payload.customWords]
             }
             return [...initialState.words]
@@ -119,8 +119,7 @@ export const createNewGame = (payload) => {
                 wordMap: board
             }
         axios.put(`https://reactcodenames-7a986.firebaseio.com/${payload.gameCode}.json`, updatedPayload)
-            .then(response => {
-                    console.log(response);
+            .then(() => {
                     dispatch({
                         type: 'NEW_GAME',
                         payload: {
@@ -128,6 +127,31 @@ export const createNewGame = (payload) => {
                             gameCode: payload.gameCode,
                             gameOver: false,
                             gameOverTrigger: '',
+                            wordMap: board,
+                        }
+                    });
+                }
+            );
+    }
+};
+
+export const restartGame = () => {
+    return (dispatch, getState) => {
+        const {words, gameCode} = getState();
+        const board = randomizeBoard(words);
+        const updatedPayload =
+            {
+                gameOver: false,
+                redTurn: true,
+                gameOverTrigger: '',
+                cards: getState().cards,
+                wordMap: board
+            }
+        axios.put(`https://reactcodenames-7a986.firebaseio.com/${gameCode}.json`, updatedPayload)
+            .then(() => {
+                    dispatch({
+                        type: 'RESTART_GAME',
+                        payload: {
                             wordMap: board,
                         }
                     });

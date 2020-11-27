@@ -1,9 +1,11 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import axios from "axios";
 import {Grid} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import GameEndDialog from "./GameEndDialog/GameEndDialog";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import WordCard from "./WordCard/WordCard";
+import {updateState} from "../../../redux/actions/actions";
 
 const useStyles = makeStyles({
     redTurn: {
@@ -19,8 +21,9 @@ const useStyles = makeStyles({
 });
 
 const GameBoard = props => {
+    const dispatch = useDispatch();
     const classes = useStyles();
-    const redTurn = useSelector(state => state.redTurn)
+    const {gameCode,redTurn} = useSelector(state => state)
     const switchVisuals = () => {
         if (redTurn) {
             return classes.redTurn;
@@ -32,9 +35,20 @@ const GameBoard = props => {
                 word={item.word}
                 index={index}
                 color={item.color}
+                isShown={item.isShown}
             />)
         }
     );
+    useEffect( ()=> {
+        const checkUpdate = () => {
+            axios.get(`https://reactcodenames-7a986.firebaseio.com/${gameCode}.json`)
+                .then(response => dispatch(updateState(response.data)))
+        };
+        const updateInterval = setInterval(
+            checkUpdate,1000
+        )
+        return ()=>{clearInterval(updateInterval)}
+    }, )
     return (
         <Grid className={switchVisuals()} direction={"row"} container justify={"space-between"}>
             {mappedBoard}

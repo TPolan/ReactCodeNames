@@ -83,6 +83,14 @@ export const updateWordMap = payload => {
             }))
     }
 };
+export const updateState = payload => {
+    return {
+        type: 'UPDATE_STATE',
+        payload: {
+            ...payload
+        }
+    }
+};
 
 export const switchView = () => {
     return {

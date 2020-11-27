@@ -2,11 +2,11 @@ import React, {useEffect, useState} from 'react';
 import {Button, Dialog, DialogTitle, Grid, Typography} from "@material-ui/core";
 import {useSelector, useDispatch} from "react-redux";
 import DialogActions from "@material-ui/core/DialogActions";
-import {createNewGame} from "../../../../redux/actions/actions";
+import {createNewGame, restartGame} from "../../../../redux/actions/actions";
 
 const GameEndDialog = () => {
 
-    const {gameOver, gameOverTrigger, words, gameCode} = useSelector(state => state);
+    const {gameOver, gameOverTrigger, words, gameCode, redTurn} = useSelector(state => state);
     const [open, setOpen] = useState(false);
     const dispatch = useDispatch();
 
@@ -17,7 +17,7 @@ const GameEndDialog = () => {
     }, [gameOver])
     const closeDialog = () => setOpen(false);
     const handleNewGame = () => {
-        dispatch(createNewGame({words, gameCode}));
+        dispatch(restartGame());
     };
 
     const createEndMessage = (triggerType) => {
@@ -37,7 +37,7 @@ const GameEndDialog = () => {
             case 'black':
                 return (
                     <Typography style={{color: 'black'}} variant={"h3"}>
-                        GAME OVER! YOU FOUND THE KILLER!
+                        GAME OVER! {redTurn ? 'RED TEAM' : 'BLUE TEAM'} FOUND THE KILLER!
                     </Typography>
                 )
             default:
@@ -56,11 +56,11 @@ const GameEndDialog = () => {
             <DialogTitle id="customized-dialog-title" onClose={closeDialog}>
                 {gameOverMessage}
             </DialogTitle>
-            <DialogActions>
-                <Grid container justify={"center"}>
-                    <Button item onClick={handleNewGame}>New Game</Button>
-                </Grid>
-            </DialogActions>
+            {/*<DialogActions>*/}
+            {/*    <Grid container justify={"center"}>*/}
+            {/*        <Button item onClick={handleNewGame}>New Game</Button>*/}
+            {/*    </Grid>*/}
+            {/*</DialogActions>*/}
         </Dialog>
     )
 }

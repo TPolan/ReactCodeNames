@@ -84,6 +84,7 @@ export const updateWordMap = payload => {
     }
 };
 export const updateState = payload => {
+    delete payload.spymaster
     return {
         type: 'UPDATE_STATE',
         payload: {
@@ -182,10 +183,16 @@ export const restartGame = () => {
         const board = randomizeBoard(words);
         const updatedPayload =
             {
+
                 gameOver: false,
                 redTurn: true,
                 gameOverTrigger: '',
-                cards: getState().cards,
+                cards: {
+                    red: 9,
+                    blue: 8,
+                    grey: 7,
+                    black: 1
+                },
                 wordMap: board
             }
         axios.put(`https://reactcodenames-7a986.firebaseio.com/${gameCode}.json`, updatedPayload)

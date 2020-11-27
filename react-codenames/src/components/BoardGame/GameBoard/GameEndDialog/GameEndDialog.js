@@ -37,7 +37,7 @@ const GameEndDialog = () => {
             case 'black':
                 return (
                     <Typography style={{color: 'black'}} variant={"h3"}>
-                        GAME OVER! {redTurn ? 'RED TEAM' : 'BLUE TEAM'} FOUND THE KILLER!
+                        {redTurn ? 'RED TEAM' : 'BLUE TEAM'} FOUND THE KILLER!
                     </Typography>
                 )
             default:

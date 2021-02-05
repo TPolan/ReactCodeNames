@@ -1,4 +1,43 @@
-import axios from "axios";
+import {projectFirestore} from "../../firebase/config";
+import axios from 'axios'
+
+export const createNewGame = payload => {
+    const collectionReference = projectFirestore.collection(payload.gameCode)
+    return (dispatch, getState) => {
+        const initialState = getState();
+        const combineWordPool = () => {
+            if (payload.customWords[0] !== '') {
+                return [...initialState.words, ...payload.customWords]
+            }
+            return [...initialState.words]
+        };
+        const combinedWordPool = combineWordPool();
+        const board = randomizeBoard(combinedWordPool);
+        const updatedPayload =
+            {
+                ...initialState,
+                words: combinedWordPool,
+                gameCode: payload.gameCode,
+                wordMap: board
+            }
+        collectionReference.add(updatedPayload)
+            .then(() => {
+                    dispatch({
+                        type: 'NEW_GAME',
+                        payload: {
+                            redirect: '/game',
+                            words: combinedWordPool,
+                            gameCode: payload.gameCode,
+                            gameOver: false,
+                            gameOverTrigger: '',
+                            wordMap: board,
+                        }
+                    });
+                }
+            ).finally(()=> {
+        });
+    }
+};
 
 const pickRandomWords = (wordPool) => {
     const randomWords = [];
@@ -61,7 +100,6 @@ export const decrementCounter = payload => {
             }))
     }
 };
-
 export const updateWordMap = payload => {
     return (dispatch, getState) => {
         const updateWord = () => {
@@ -83,12 +121,13 @@ export const updateWordMap = payload => {
             }))
     }
 };
+
 export const updateState = payload => {
     delete payload.spymaster
     return {
         type: 'UPDATE_STATE',
         payload: {
-            ...payload
+            ...payload.gameCode
         }
     }
 };
@@ -142,48 +181,12 @@ export const checkGameStatus = payload => {
     }
 };
 
-export const createNewGame = payload => {
-    return (dispatch, getState) => {
-        const initialState = getState();
-        const combineWordPool = () => {
-            if (payload.customWords[0] !== '') {
-                return [...initialState.words, ...payload.customWords]
-            }
-            return [...initialState.words]
-        };
-        const combinedWordPool = combineWordPool();
-        const board = randomizeBoard(combinedWordPool);
-        const updatedPayload =
-            {
-                ...initialState,
-                words: combinedWordPool,
-                gameCode: payload.gameCode,
-                wordMap: board
-            }
-        axios.put(`https://reactcodenames-7a986.firebaseio.com/${payload.gameCode}.json`, updatedPayload)
-            .then(() => {
-                    dispatch({
-                        type: 'NEW_GAME',
-                        payload: {
-                            words: combinedWordPool,
-                            gameCode: payload.gameCode,
-                            gameOver: false,
-                            gameOverTrigger: '',
-                            wordMap: board,
-                        }
-                    });
-                }
-            );
-    }
-};
-
 export const restartGame = () => {
     return (dispatch, getState) => {
         const {words, gameCode} = getState();
         const board = randomizeBoard(words);
         const updatedPayload =
             {
-
                 gameOver: false,
                 redTurn: true,
                 gameOverTrigger: '',

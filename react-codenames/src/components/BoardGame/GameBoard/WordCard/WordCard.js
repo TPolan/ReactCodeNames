@@ -74,7 +74,7 @@ const WordCard = props => {
     };
     return (
         <Grid item key={index} className={classes.root}>
-            <Button disabled={shown} onClick={handleWordClick}>
+            <Button disabled={shown || spymaster} onClick={handleWordClick}>
                 <Card className={switchVisuals()} variant="outlined">
                     <CardContent>
                         <Typography

@@ -1,5 +1,6 @@
 const initialState = {
-    wordMap:[],
+    redirect: null,
+    wordMap: [],
     cards: {
         red: 9,
         blue: 8,
@@ -28,7 +29,7 @@ const gameReducer = (state = initialState, action) => {
                 ...state,
                 cards: {
                     ...state.cards,
-                   ...payload.cards
+                    ...payload.cards
                 }
             }
         case 'UPDATE_WORD_MAP':
@@ -59,16 +60,19 @@ const gameReducer = (state = initialState, action) => {
         case 'NEW_GAME':
             return {
                 ...state,
+                redirect: payload.redirect,
                 gameOver: false,
                 words: [...payload.words],
                 gameCode: payload.gameCode,
                 wordMap: payload.wordMap,
+                gameOverTrigger: payload.gameOverTrigger
             }
         case 'RESTART_GAME':
             return {
                 ...state,
                 gameOver: false,
                 wordMap: payload.wordMap,
+                gameOverTrigger: ''
             }
         case 'SWITCH_VIEW':
             return {

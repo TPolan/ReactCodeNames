@@ -42,67 +42,47 @@ export const createNewGame = payload => {
     }
 };
 
-const pickRandomWords = (wordPool) => {
-    const randomWords = [];
-    for (let i = 0; i < 25; i++) {
-        const randomIndex = Math.floor(Math.random() * wordPool.length);
-        let randomWord = wordPool.splice(randomIndex, 1)
-        randomWords.push(...randomWord)
+export const passTurn = () => {
+    return (dispatch, getState) => {
+        const {documentId, redTurn} = getState();
+        gameRef.doc(documentId).update({redTurn: !redTurn});
     }
-    return randomWords;
-};
 
-const colorRandomWords = (words, wordCount, wordColor) => {
-    let coloredWords = [];
-    for (let i = 0; i < wordCount; i++) {
-        const randomIndex = Math.floor(Math.random() * words.length);
-        let randWord = words.splice(randomIndex, 1)
-        coloredWords.push(
-            {
-                word: randWord[0],
-                color: wordColor,
-                isShown: false
-            }
-        )
-    }
-    return coloredWords;
 }
 
-const shuffleWords = (words) => {
-    for (let i = words.length - 1; i > 0; i--) {
-        let j = Math.floor(Math.random() * i);
-        let temp = words[i];
-        words[i] = words[j];
-        words[j] = temp;
+export const closeLobby = () => {
+    return (dispatch, getState) => {
+        const {documentId} = getState();
+        gameRef.doc(documentId).delete()
+            .then(dispatch({type: 'CLOSE_LOBBY'}));
     }
-    return words;
 };
 
-const randomizeBoard = words => {
-    let randomWords = pickRandomWords([...words]);
-    let randomizedColoredWords = [];
-    randomizedColoredWords.push(colorRandomWords(randomWords, 9, 'red'));
-    randomizedColoredWords.push(colorRandomWords(randomWords, 8, 'blue'));
-    randomizedColoredWords.push(colorRandomWords(randomWords, 7, 'grey'));
-    randomizedColoredWords.push(colorRandomWords(randomWords, 1, 'black'));
-    return shuffleWords(randomizedColoredWords.reduce((previousValue, currentValue) => [...previousValue, ...currentValue]));
-}
+export const updateState = payload => {
+    delete payload.spymaster
+    delete payload.documentId
+    delete payload.redirect
+
+    return {
+        type: 'UPDATE_STATE',
+        payload: {
+            ...payload
+        }
+    }
+};
 
 export const decrementCounter = payload => {
     return (dispatch, getState) => {
-        const updatedCardCount = {
+        const {documentId} = getState();
+        gameRef.doc(documentId).update({
             cards: {
                 ...getState().cards,
                 [payload.color]: getState().cards[payload.color] - 1
             }
-        }
-        axios.patch(`https://reactcodenames-7a986.firebaseio.com/${getState().gameCode}.json`, updatedCardCount)
-            .then(dispatch({
-                type: 'DECREMENT_COUNTER',
-                payload: {...updatedCardCount}
-            }))
+        });
     }
 };
+
 export const updateWordMap = payload => {
     return (dispatch, getState) => {
         const updateWord = () => {
@@ -122,19 +102,6 @@ export const updateWordMap = payload => {
                 type: 'UPDATE_WORD_MAP',
                 payload: updatedWordMap
             }))
-    }
-};
-
-export const updateState = payload => {
-    delete payload.spymaster
-    delete payload.documentId
-    delete payload.redirect
-
-    return {
-        type: 'UPDATE_STATE',
-        payload: {
-            ...payload
-        }
     }
 };
 
@@ -216,18 +183,47 @@ export const restartGame = () => {
             );
     }
 };
-
-export const passTurn = () => {
-    return (dispatch, getState) => {
-        const {documentId, redTurn} = getState();
-        gameRef.doc(documentId).update({redTurn: !redTurn})
+const pickRandomWords = (wordPool) => {
+    const randomWords = [];
+    for (let i = 0; i < 25; i++) {
+        const randomIndex = Math.floor(Math.random() * wordPool.length);
+        let randomWord = wordPool.splice(randomIndex, 1)
+        randomWords.push(...randomWord)
     }
-
-}
-export const closeLobby = () => {
-    return (dispatch, getState) => {
-        const {documentId} = getState();
-        gameRef.doc(documentId).delete()
-            .then(dispatch({type: 'CLOSE_LOBBY'}))
-    }
+    return randomWords;
 };
+
+const colorRandomWords = (words, wordCount, wordColor) => {
+    let coloredWords = [];
+    for (let i = 0; i < wordCount; i++) {
+        const randomIndex = Math.floor(Math.random() * words.length);
+        let randWord = words.splice(randomIndex, 1)
+        coloredWords.push(
+            {
+                word: randWord[0],
+                color: wordColor,
+                isShown: false
+            }
+        )
+    }
+    return coloredWords;
+}
+
+const shuffleWords = (words) => {
+    for (let i = words.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * i);
+        let temp = words[i];
+        words[i] = words[j];
+        words[j] = temp;
+    }
+    return words;
+};
+const randomizeBoard = words => {
+    let randomWords = pickRandomWords([...words]);
+    let randomizedColoredWords = [];
+    randomizedColoredWords.push(colorRandomWords(randomWords, 9, 'red'));
+    randomizedColoredWords.push(colorRandomWords(randomWords, 8, 'blue'));
+    randomizedColoredWords.push(colorRandomWords(randomWords, 7, 'grey'));
+    randomizedColoredWords.push(colorRandomWords(randomWords, 1, 'black'));
+    return shuffleWords(randomizedColoredWords.reduce((previousValue, currentValue) => [...previousValue, ...currentValue]));
+}

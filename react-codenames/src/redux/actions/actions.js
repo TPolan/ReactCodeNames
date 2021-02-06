@@ -94,14 +94,10 @@ export const updateWordMap = payload => {
             })
 
         };
-        const updatedWordMap = {
+        const {documentId} = getState();
+        gameRef.doc(documentId).update({
             wordMap: updateWord()
-        }
-        axios.patch(`https://reactcodenames-7a986.firebaseio.com/${getState().gameCode}.json`, updatedWordMap)
-            .then(dispatch({
-                type: 'UPDATE_WORD_MAP',
-                payload: updatedWordMap
-            }))
+        });
     }
 };
 

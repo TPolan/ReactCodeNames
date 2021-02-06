@@ -117,6 +117,27 @@ export const endGame = triggerType => {
     }
 };
 
+export const restartGame = () => {
+    return (dispatch, getState) => {
+        const {words,documentId} = getState();
+        const board = randomizeBoard(words);
+        const updatedPayload =
+            {
+                gameOver: false,
+                redTurn: true,
+                gameOverTrigger: '',
+                cards: {
+                    red: 9,
+                    blue: 8,
+                    grey: 7,
+                    black: 1
+                },
+                wordMap: board
+            }
+        gameRef.doc(documentId).update(updatedPayload);
+    }
+};
+
 export const joinGame = payload => {
     return dispatch => {
         const {gameCode} = payload;
@@ -147,35 +168,6 @@ export const checkGameStatus = payload => {
     }
 };
 
-export const restartGame = () => {
-    return (dispatch, getState) => {
-        const {words, gameCode} = getState();
-        const board = randomizeBoard(words);
-        const updatedPayload =
-            {
-                gameOver: false,
-                redTurn: true,
-                gameOverTrigger: '',
-                cards: {
-                    red: 9,
-                    blue: 8,
-                    grey: 7,
-                    black: 1
-                },
-                wordMap: board
-            }
-        axios.put(`https://reactcodenames-7a986.firebaseio.com/${gameCode}.json`, updatedPayload)
-            .then(() => {
-                    dispatch({
-                        type: 'RESTART_GAME',
-                        payload: {
-                            wordMap: board,
-                        }
-                    });
-                }
-            );
-    }
-};
 const pickRandomWords = (wordPool) => {
     const randomWords = [];
     for (let i = 0; i < 25; i++) {

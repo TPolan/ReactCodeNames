@@ -1,8 +1,10 @@
 import {projectFirestore} from "../../firebase/config";
 import axios from 'axios'
 
+const gameRef = projectFirestore.collection('Games')
+
 export const createNewGame = payload => {
-    const collectionReference = projectFirestore.collection(payload.gameCode)
+    const collectionReference = projectFirestore.collection('Games')
     return (dispatch, getState) => {
         const initialState = getState();
         const combineWordPool = () => {
@@ -20,11 +22,13 @@ export const createNewGame = payload => {
                 gameCode: payload.gameCode,
                 wordMap: board
             }
+
         collectionReference.add(updatedPayload)
-            .then(() => {
+            .then((docRef) => {
                     dispatch({
                         type: 'NEW_GAME',
                         payload: {
+                            documentId: docRef.id,
                             redirect: '/game',
                             words: combinedWordPool,
                             gameCode: payload.gameCode,
@@ -34,8 +38,7 @@ export const createNewGame = payload => {
                         }
                     });
                 }
-            ).finally(()=> {
-        });
+            );
     }
 };
 
@@ -124,10 +127,13 @@ export const updateWordMap = payload => {
 
 export const updateState = payload => {
     delete payload.spymaster
+    delete payload.documentId
+    delete payload.redirect
+
     return {
         type: 'UPDATE_STATE',
         payload: {
-            ...payload.gameCode
+            ...payload
         }
     }
 };
@@ -213,14 +219,15 @@ export const restartGame = () => {
 
 export const passTurn = () => {
     return (dispatch, getState) => {
-        axios.patch(`https://reactcodenames-7a986.firebaseio.com/${getState().gameCode}.json`, {redTurn: !getState().redTurn})
-            .then(dispatch({type: 'PASS_TURN'}))
+        const {documentId, redTurn} = getState();
+        gameRef.doc(documentId).update({redTurn: !redTurn})
     }
 
 }
 export const closeLobby = () => {
     return (dispatch, getState) => {
-        axios.delete(`https://reactcodenames-7a986.firebaseio.com/${getState().gameCode}.json`,)
+        const {documentId} = getState();
+        gameRef.doc(documentId).delete()
             .then(dispatch({type: 'CLOSE_LOBBY'}))
     }
 };

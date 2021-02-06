@@ -9,19 +9,26 @@ import {updateState} from "../../redux/actions/actions";
 
 
 const BoardGame = props => {
-    const {wordMap, gameCode} = useSelector(state => state);
+    const {wordMap, documentId} = useSelector(state => state);
+    const gameRef = projectFirestore.collection('Games').doc(documentId);
     const [board, setBoard] = useState([])
     const dispatch = useDispatch();
     useEffect(() => {
         setBoard(wordMap);
     }, [wordMap])
 
-    const gameRef = projectFirestore.collection(gameCode);
-    gameRef.onSnapshot((snapshot) => {
-        const newState = snapshot;
-        // dispatch(updateState({...newState}));
-        console.log(snapshot);
-    })
+    useEffect(() => {
+
+        const unsub = gameRef.onSnapshot((snapshot) => {
+            dispatch(updateState({...snapshot.data()}));
+            console.log(snapshot.data());
+        })
+        return () => unsub();
+
+    }, []);
+    console.log('rendered')
+
+
 
     return (
         <Container fixed>
@@ -33,3 +40,4 @@ const BoardGame = props => {
 };
 
 export default BoardGame;
+

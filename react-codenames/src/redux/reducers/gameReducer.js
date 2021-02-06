@@ -1,4 +1,5 @@
 const initialState = {
+    documentId: null,
     redirect: null,
     wordMap: [],
     cards: {
@@ -60,6 +61,7 @@ const gameReducer = (state = initialState, action) => {
         case 'NEW_GAME':
             return {
                 ...state,
+                documentId:payload.documentId,
                 redirect: payload.redirect,
                 gameOver: false,
                 words: [...payload.words],

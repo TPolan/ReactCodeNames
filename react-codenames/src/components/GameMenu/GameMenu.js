@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Button, Grid, TextField, Typography} from "@material-ui/core";
 import {useDispatch, useSelector} from "react-redux";
-import {createNewGame} from "../../redux/actions/actions";
+import {checkGameStatus} from "../../redux/actions/actions";
 import {Redirect} from "react-router";
 
 const GameMenu = props => {
@@ -12,7 +12,7 @@ const GameMenu = props => {
 
 
     const startGame = wordPool => {
-        dispatch(createNewGame({
+        dispatch(checkGameStatus({
             gameCode,
             customWords: wordPool.split(',')
         }));

@@ -119,7 +119,7 @@ export const endGame = triggerType => {
 
 export const restartGame = () => {
     return (dispatch, getState) => {
-        const {words,documentId} = getState();
+        const {words, documentId} = getState();
         const board = randomizeBoard(words);
         const updatedPayload =
             {
@@ -138,33 +138,35 @@ export const restartGame = () => {
     }
 };
 
-export const joinGame = payload => {
-    return dispatch => {
-        const {gameCode} = payload;
-        axios.get(`https://reactcodenames-7a986.firebaseio.com/${gameCode}.json`)
-            .then(response => {
-                dispatch({
-                    type: 'JOIN_GAME',
-                    payload: {
-                        ...response.data
-                    }
-                })
+export const checkGameStatus = payload => {
+    return (dispatch) => {
+        gameRef.where('gameCode', "==", payload.gameCode).get()
+            .then((query) => {
+                if (query.empty) {
+                    dispatch(createNewGame(payload))
+                } else {
+                    let docId = query.docs[0].id
+                    dispatch(joinGame({docId}))
+                }
             })
     }
 };
 
-export const checkGameStatus = payload => {
-    return (dispatch) => {
-        axios.get(`https://reactcodenames-7a986.firebaseio.com/${payload.gameCode}.json`)
-            .then(response => {
-                    if (response.data) {
-                        dispatch(joinGame(payload))
-                    } else {
-                        dispatch(createNewGame(payload))
+export const joinGame = payload => {
+    return dispatch => {
+        const {docId} = payload;
+        gameRef.doc(docId).get()
+            .then(docRef => {
+                console.log(docRef.data())
+                dispatch({
+                    type: 'JOIN_GAME',
+                    payload: {
+                        ...docRef.data(),
+                        documentId: docId,
+                        redirect: '/game'
                     }
-                }
-            )
-            .catch(error => console.log(error))
+                })
+            })
     }
 };
 

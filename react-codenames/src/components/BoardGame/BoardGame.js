@@ -20,15 +20,16 @@ const BoardGame = props => {
     useEffect(() => {
 
         const unsub = gameRef.onSnapshot((snapshot) => {
-            dispatch(updateState({...snapshot.data()}));
-            console.log(snapshot.data());
+            if (snapshot) {
+                dispatch(updateState({...snapshot.data()}));
+            } else {
+                props.history.push('/');
+            }
         })
         return () => unsub();
 
     }, []);
     console.log('rendered')
-
-
 
     return (
         <Container fixed>

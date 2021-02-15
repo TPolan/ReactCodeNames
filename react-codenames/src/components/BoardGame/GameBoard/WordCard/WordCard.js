@@ -78,7 +78,6 @@ const WordCard = props => {
                 <Card className={switchVisuals()} variant="outlined">
                     <CardContent>
                         <Typography
-                            className={shown ? classes.title_shown : classes.title_hidden}
                             color="textSecondary"
                             gutterBottom
                         >

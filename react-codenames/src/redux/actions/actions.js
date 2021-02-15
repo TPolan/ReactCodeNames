@@ -1,5 +1,4 @@
 import {projectFirestore} from "../../firebase/config";
-import axios from 'axios'
 
 const gameRef = projectFirestore.collection('Games')
 
@@ -152,9 +151,8 @@ export const checkGameStatus = payload => {
     }
 };
 
-export const joinGame = payload => {
+export const joinGame = ({docId}) => {
     return dispatch => {
-        const {docId} = payload;
         gameRef.doc(docId).get()
             .then(docRef => {
                 console.log(docRef.data())

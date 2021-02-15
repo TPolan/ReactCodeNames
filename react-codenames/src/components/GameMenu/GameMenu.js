@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {checkGameStatus} from "../../redux/actions/actions";
 import {Redirect} from "react-router";
 
-const GameMenu = props => {
+const GameMenu = () => {
     const dispatch = useDispatch();
     const [customWords, setCustomWords] = useState('');
     const [gameCode, setGameCode] = useState('');
@@ -16,8 +16,6 @@ const GameMenu = props => {
             gameCode,
             customWords: wordPool.split(',')
         }));
-        // props.history.push('/'+ gameCode);
-        // props.history.push('/game');
     };
 
     const handleChange = event => {

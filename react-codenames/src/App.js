@@ -5,10 +5,8 @@ import {Container} from "@material-ui/core";
 import GameMenu from "./components/GameMenu/GameMenu";
 import {BrowserRouter} from "react-router-dom";
 import {Route} from "react-router";
-// import {useSelector} from "react-redux";
 
 function App() {
-    // const gameCode = useSelector(state => state.gameCode);
 
     return (
         <div className="App">
